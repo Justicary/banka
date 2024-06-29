@@ -25,21 +25,21 @@ declare type LoginUser = {
   password: string;
 };
 
-declare type User = {
+declare type Usuario = {
   $id: string;
   email: string;
-  userId: string;
+  usuarioId: string;
   dwollaCustomerUrl: string;
   dwollaCustomerId: string;
-  firstName: string;
-  lastName: string;
-  name: string;
-  address1: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  dateOfBirth: string;
-  ssn: string;
+  nombres: string;
+  apellidos: string;
+  nombre: string;
+  direccion: string;
+  ciudad: string;
+  estado: string;
+  codigoPostal: string;
+  fechaDeNacimiento: string;
+  rfc: string;
 };
 
 declare type NewUserParams = {
@@ -49,21 +49,21 @@ declare type NewUserParams = {
   password: string;
 };
 
-declare type Account = {
+declare type Cuenta = {
   id: string;
-  availableBalance: number;
-  currentBalance: number;
-  officialName: string;
-  mask: string;
-  institutionId: string;
-  name: string;
-  type: string;
-  subtype: string;
+  saldoDisponible: number;
+  saldoActual: number;
+  nombreOficial: string;
+  mascara: string;
+  institucionId: string;
+  nombre: string;
+  tipo: string;
+  subtipo: string;
   appwriteItemId: string;
   shareableId: string;
 };
 
-declare type Transaction = {
+declare type Transaccion = {
   id: string;
   $id: string;
   name: string;
@@ -138,15 +138,22 @@ declare type NewDwollaCustomerParams = {
 };
 
 declare interface CreditCardProps {
-  account: Account;
+  account: Cuenta;
   userName: string;
   showBalance?: boolean;
 }
 
 declare interface BankInfoProps {
-  account: Account;
+  account: Cuenta;
   appwriteItemId?: string;
   type: "full" | "card";
+}
+
+declare interface EncabezadoCajaProps {
+  nombre?: string;
+  subtitulo: string;
+  tipo?: "titulo" | "saludo";
+  titulo: string;
 }
 
 declare interface HeaderBoxProps {
@@ -157,7 +164,7 @@ declare interface HeaderBoxProps {
 }
 
 declare interface MobileNavProps {
-  user: User;
+  user: Usuario;
 }
 
 declare interface PageHeaderProps {
@@ -174,7 +181,7 @@ declare interface PaginationProps {
 }
 
 declare interface PlaidLinkProps {
-  user: User;
+  user: Usuario;
   variant?: "primary" | "ghost";
   dwollaCustomerId?: string;
 }
@@ -193,46 +200,46 @@ declare interface AuthFormProps {
 }
 
 declare interface BankDropdownProps {
-  accounts: Account[];
+  accounts: Cuenta[];
   setValue?: UseFormSetValue<any>;
   otherStyles?: string;
 }
 
 declare interface BankTabItemProps {
-  account: Account;
+  account: Cuenta;
   appwriteItemId?: string;
 }
 
-declare interface TotalBalanceBoxProps {
-  accounts: Account[];
-  totalBanks: number;
-  totalCurrentBalance: number;
+declare interface SaldoTotalCajaProps {
+  cuentas: Cuenta[];
+  totalBancos: number;
+  totalSaldoActual: number;
 }
 
 declare interface FooterProps {
-  user: User;
-  type?: 'mobile' | 'desktop'
+  user: Usuario;
+  type?: "mobile" | "desktop";
 }
 
 declare interface RightSidebarProps {
-  user: User;
-  transactions: Transaction[];
-  banks: Bank[] & Account[];
+  user: Usuario;
+  transactions: Transaccion[];
+  banks: Bank[] & Cuenta[];
 }
 
-declare interface SiderbarProps {
-  user: User;
+declare interface BarraLateralProps {
+  usuario: Partial<Usuario>;
 }
 
 declare interface RecentTransactionsProps {
-  accounts: Account[];
-  transactions: Transaction[];
+  accounts: Cuenta[];
+  transactions: Transaccion[];
   appwriteItemId: string;
   page: number;
 }
 
 declare interface TransactionHistoryTableProps {
-  transactions: Transaction[];
+  transactions: Transaccion[];
   page: number;
 }
 
@@ -241,19 +248,19 @@ declare interface CategoryBadgeProps {
 }
 
 declare interface TransactionTableProps {
-  transactions: Transaction[];
+  transactions: Transaccion[];
 }
 
 declare interface CategoryProps {
   category: CategoryCount;
 }
 
-declare interface DoughnutChartProps {
-  accounts: Account[];
+declare interface GraficoDonaProps {
+  cuentas: Cuenta[];
 }
 
 declare interface PaymentTransferFormProps {
-  accounts: Account[];
+  accounts: Cuenta[];
 }
 
 // Actions
@@ -305,7 +312,7 @@ declare interface getUserInfoProps {
 
 declare interface exchangePublicTokenProps {
   publicToken: string;
-  user: User;
+  user: Usuario;
 }
 
 declare interface createBankAccountProps {
