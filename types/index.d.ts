@@ -82,7 +82,7 @@ declare type Transaccion = {
   receiverBankId: string;
 };
 
-declare type Bank = {
+declare type Banco = {
   $id: string;
   accountId: string;
   bankId: string;
@@ -137,16 +137,16 @@ declare type NewDwollaCustomerParams = {
   ssn: string;
 };
 
-declare interface CreditCardProps {
-  account: Cuenta;
-  userName: string;
-  showBalance?: boolean;
+declare interface TarjetaBancariaProps {
+  cuenta: Partial<Cuenta>;
+  nombreUsuario: string;
+  mostrarSaldo?: boolean;
 }
 
 declare interface BankInfoProps {
-  account: Cuenta;
+  cuenta: Cuenta;
   appwriteItemId?: string;
-  type: "full" | "card";
+  tipo: "full" | "card";
 }
 
 declare interface EncabezadoCajaProps {
@@ -221,10 +221,10 @@ declare interface FooterProps {
   type?: "mobile" | "desktop";
 }
 
-declare interface RightSidebarProps {
-  user: Usuario;
-  transactions: Transaccion[];
-  banks: Bank[] & Cuenta[];
+declare interface BarraLateralDerechaProps {
+  usuario: Partial<Usuario>;
+  transacciones: Transaccion[];
+  bancos: Partial<Banco>[] & Partial<Cuenta>[];
 }
 
 declare interface BarraLateralProps {

@@ -1,4 +1,4 @@
-export const sidebarLinks = [
+export const ligasBarraLateral = [
   {
     imgURL: "/icons/home.svg",
     route: "/",
@@ -6,17 +6,17 @@ export const sidebarLinks = [
   },
   {
     imgURL: "/icons/dollar-circle.svg",
-    route: "/my-banks",
+    route: "/mis-cuentas",
     label: "Mis Cuentas",
   },
   {
     imgURL: "/icons/transaction.svg",
-    route: "/transaction-history",
+    route: "/historial-transacciones",
     label: "Historial Transacciones",
   },
   {
     imgURL: "/icons/money-send.svg",
-    route: "/payment-transfer",
+    route: "/transferir-fondos",
     label: "Transferir Fondos",
   },
 ];

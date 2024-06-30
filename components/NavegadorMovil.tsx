@@ -12,7 +12,7 @@ import {
   SheetClose,
 } from "@/components/ui/sheet";
 import Image from "next/image";
-import { sidebarLinks } from "@/constants";
+import { ligasBarraLateral } from "@/constants";
 const NavegadorMovil = ({ usuario }: BarraLateralProps) => {
   const rutaActual = usePathname();
   return (
@@ -40,7 +40,7 @@ const NavegadorMovil = ({ usuario }: BarraLateralProps) => {
           <div className="mobilenav-sheet">
             <SheetClose asChild>
               <nav className="flex h-full flex-col gap-6 pt-16 text-white">
-                {sidebarLinks.map((link) => {
+                {ligasBarraLateral.map((link) => {
                   const isActive =
                     link.route === rutaActual ||
                     rutaActual.startsWith(`${link.route}/`);

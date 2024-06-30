@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import React from "react";
 // 👉 Modulos Internos
 import { cn } from "@/lib/utils";
-import { sidebarLinks } from "@/constants";
+import { ligasBarraLateral } from "@/constants";
 
 const BarraLateral = ({ usuario }: BarraLateralProps) => {
   const rutaActual = usePathname();
@@ -23,7 +23,7 @@ const BarraLateral = ({ usuario }: BarraLateralProps) => {
           />
           <h1 className="sidebar-logo">Banka</h1>
         </Link>
-        {sidebarLinks.map((link) => {
+        {ligasBarraLateral.map((link) => {
           const isActive =
             link.route === rutaActual ||
             rutaActual.startsWith(`${link.route}/`);
