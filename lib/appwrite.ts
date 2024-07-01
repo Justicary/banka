@@ -3,15 +3,15 @@
 import { Client, Account, Databases, Users } from "node-appwrite";
 import { cookies } from "next/headers";
 
-export async function createSessionClient() {
+export async function crearSesionCliente() {
   const client = new Client()
     .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!);
+    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!);
 
-  const session = cookies().get("appwrite-session");
+  const session = cookies().get("sesion-appwrite");
 
   if (!session || !session.value) {
-    throw new Error("No session");
+    throw new Error("No existe el sesionID");
   }
 
   client.setSession(session.value);
@@ -22,11 +22,17 @@ export async function createSessionClient() {
     },
   };
 }
-
-export async function createAdminClient() {
+/**
+ * Crea un cliente admin(control total) utilizando las credenciales especificadas.
+ * @returns Un objeto que contiene las instancias de las clases Account, Databases y Users.*/
+export async function crearAdminCliente(): Promise<{
+  account: Account;
+  database: Databases;
+  user: Users;
+}> {
   const client = new Client()
     .setEndpoint(process.env.NEXT_PUBLIC_APPWRITE_ENDPOINT!)
-    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT!)
+    .setProject(process.env.NEXT_PUBLIC_APPWRITE_PROJECT_ID!)
     .setKey(process.env.NEXT_APPWRITE_KEY!);
 
   return {
@@ -38,7 +44,6 @@ export async function createAdminClient() {
     },
     get user() {
       return new Users(client);
-    }
+    },
   };
 }
-

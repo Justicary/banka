@@ -195,20 +195,45 @@ export const getTransactionStatus = (date: Date) => {
   return date > twoDaysAgo ? "Processing" : "Success";
 };
 
-export const authFormSchema = (type: string) =>
+/**Genera un esquema Zod para el tipo de autenticación dado.
+ * @param {string} tipo - El tipo de autenticación, puede ser "sign-in" o "sign-up".
+ * @return {z.ZodObject} - Objeto esquema Zod con la estructura correcta en base al tipo de autenticación.*/
+export const esquemaAUTH = (tipo: string) =>
   z.object({
-    // sign up
-    firstName: type === "sign-in" ? z.string().optional() : z.string().min(3),
-    lastName: type === "sign-in" ? z.string().optional() : z.string().min(3),
-    address1: type === "sign-in" ? z.string().optional() : z.string().max(50),
-    city: type === "sign-in" ? z.string().optional() : z.string().max(50),
-    state:
-      type === "sign-in" ? z.string().optional() : z.string().min(2).max(2),
-    postalCode:
-      type === "sign-in" ? z.string().optional() : z.string().min(3).max(6),
-    dateOfBirth: type === "sign-in" ? z.string().optional() : z.string().min(3),
-    ssn: type === "sign-in" ? z.string().optional() : z.string().min(3),
-    // both
-    email: z.string().email(),
-    password: z.string().min(8),
+    // Registro
+    apellidos:
+      tipo === "sign-in"
+        ? z.string().optional()
+        : z.string().min(3, "Apellidos demasiado cortos..."),
+    codigoPostal:
+      tipo === "sign-in"
+        ? z.string().optional()
+        : z.string().min(5, "Código postal demasiado corto..."),
+    curp:
+      tipo === "sign-in"
+        ? z.string().optional()
+        : z.string().min(18, "CURP demasiado corta..."),
+    direccion1:
+      tipo === "sign-in"
+        ? z.string().optional()
+        : z.string().max(50, "Dirección demasiado larga..."),
+    ciudad:
+      tipo === "sign-in"
+        ? z.string().optional()
+        : z.string().min(2, "Ciudad demasiado corta..."),
+    estado:
+      tipo === "sign-in"
+        ? z.string().optional()
+        : z.string().min(2, "Estado demasiado corto..."),
+    fdn:
+      tipo === "sign-in"
+        ? z.string().optional()
+        : z.string().min(3, "Fecha de nacimiento demasiado corta..."),
+    nombres:
+      tipo === "sign-in"
+        ? z.string().optional()
+        : z.string().min(3, "Nombre demasiado corto..."),
+    // Ambos
+    email: z.string().email("Correo invalido..."),
+    password: z.string().min(8, "Contraseña demasiado corta..."),
   });

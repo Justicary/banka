@@ -7,15 +7,15 @@ declare type SearchParamProps = {
 
 // ========================================
 
-declare type SignUpParams = {
-  firstName: string;
-  lastName: string;
-  address1: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  dateOfBirth: string;
-  ssn: string;
+declare type registrarParams = {
+  nombres?: string;
+  apellidos?: string;
+  direccion1?: string;
+  ciudad?: string;
+  estado?: string;
+  codigoPostal?: string;
+  fdn?: string;
+  curp?: string;
   email: string;
   password: string;
 };
@@ -38,8 +38,8 @@ declare type Usuario = {
   ciudad: string;
   estado: string;
   codigoPostal: string;
-  fechaDeNacimiento: string;
-  rfc: string;
+  fdn: string;
+  curp: string;
 };
 
 declare type NewUserParams = {
@@ -125,16 +125,16 @@ declare type AddFundingSourceParams = {
 };
 
 declare type NewDwollaCustomerParams = {
-  firstName: string;
-  lastName: string;
+  nombres: string;
+  apellidos: string;
   email: string;
-  type: string;
-  address1: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  dateOfBirth: string;
-  ssn: string;
+  tipo: string;
+  direccion1: string;
+  ciudad: string;
+  estado: string;
+  codigoPostal: string;
+  fdn: string;
+  curp: string;
 };
 
 declare interface TarjetaBancariaProps {
@@ -301,13 +301,13 @@ declare interface getTransactionsByBankIdProps {
   bankId: string;
 }
 
-declare interface signInProps {
+declare interface iniciarSesionProps {
   email: string;
   password: string;
 }
 
-declare interface getUserInfoProps {
-  userId: string;
+declare interface getUsuarioInfoProps {
+  usuarioID: string;
 }
 
 declare interface exchangePublicTokenProps {
