@@ -1,7 +1,11 @@
-import React from "react";
+import AuthFormulario from "@/components/AuthFormulario";
 
-const Registro = () => {
-  return <div>Registro</div>;
+const SignUp = () => {
+  return (
+    <section className="flex-center size-full max-sm:px-6">
+      <AuthFormulario tipo="sign-up" />
+    </section>
+  );
 };
 
-export default Registro;
+export default SignUp;

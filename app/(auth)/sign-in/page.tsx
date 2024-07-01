@@ -1,7 +1,11 @@
-import React from "react";
+import AuthFormulario from "@/components/AuthFormulario";
 
-const Ingresa = () => {
-  return <div>Ingresa</div>;
+const SignIn = () => {
+  return (
+    <section className="flex-center size-full max-sm:px-6">
+      <AuthFormulario tipo="sign-in" />
+    </section>
+  );
 };
 
-export default Ingresa;
+export default SignIn;

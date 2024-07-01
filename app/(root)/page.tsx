@@ -1,22 +1,21 @@
 // 👉 Modulos Externos
 import React from "react";
+import { redirect } from "next/navigation";
 // 👉 Modulos Internos
 import EncabezadoCaja from "@/components/EncabezadoCaja";
 import SaldoTotalCaja from "@/components/SaldoTotalCaja";
 import BarraLateralDerecha from "@/components/BarraLateralDerecha";
+import { getUsuarioRegistrado } from "@/lib/actions/user.actions";
 
-const Inicio = () => {
-  const usuarioFake: Partial<Usuario> = {
-    nombres: "Victor Eduardo",
-    apellidos: "Mancera Gallardo",
-    email: "vemancera@gmail.com",
-  };
+const Inicio = async () => {
+  const usuario: Usuario = await getUsuarioRegistrado();
+  if (!usuario) redirect("/sign-in");
   return (
     <section className="home">
       <div className="home-content">
         <header className="home-header">
           <EncabezadoCaja
-            nombre={usuarioFake.nombres || "Invitado"}
+            nombre={usuario.nombres || "Invitado"}
             subtitulo="Accesa y controla tu cuenta y transacciones de forma eficiente."
             tipo="saludo"
             titulo="Bienvenido"
@@ -31,7 +30,7 @@ const Inicio = () => {
       </div>
       <BarraLateralDerecha
         bancos={[{ saldoActual: 1000 }, { saldoActual: 2000 }]}
-        usuario={usuarioFake}
+        usuario={usuario}
         transacciones={[]}
       />
     </section>
