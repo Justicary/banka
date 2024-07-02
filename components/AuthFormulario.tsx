@@ -6,13 +6,13 @@ import Image from "next/image";
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 // 👉 Modulos Internos
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { esquemaAUTH } from "@/lib/utils";
 import InputPersonalizado from "./InputPersonalizado";
-import { useRouter } from "next/navigation";
 import { iniciarSesion, registrar } from "@/lib/actions/user.actions";
 
 const AuthFormulario = ({ tipo }: { tipo: "sign-in" | "sign-up" }) => {

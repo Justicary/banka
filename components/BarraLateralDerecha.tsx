@@ -52,7 +52,9 @@ const BarraLateralDerecha = ({
               <TarjetaBancaria
                 key={bancos[0].$id}
                 cuenta={bancos[0]}
-                nombreUsuario={`${usuario.nombres} ${usuario.apellidos}`}
+                nombreUsuario={`${usuario.nombres.split(" ")[0]} ${
+                  usuario.apellidos.split(" ")[0]
+                }`}
                 mostrarSaldo={false}
               />
             </div>
@@ -61,7 +63,9 @@ const BarraLateralDerecha = ({
                 <TarjetaBancaria
                   key={bancos[1].$id}
                   cuenta={bancos[1]}
-                  nombreUsuario={`${usuario.nombres} ${usuario.apellidos}`}
+                  nombreUsuario={`${usuario.nombres.split(" ")[0]} ${
+                    usuario.apellidos.split(" ")[0]
+                  }`}
                   mostrarSaldo={false}
                 />
               </div>

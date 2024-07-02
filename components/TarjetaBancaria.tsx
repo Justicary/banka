@@ -16,12 +16,12 @@ const TarjetaBancaria = ({
             {cuenta.nombre || "Banco Tio McPato"}
           </h1>
           <p className="font-ibm-plex-serif font-black text-white">
-            {formatAmount(cuenta?.saldoActual || 0)}
+            {mostrarSaldo && formatAmount(cuenta?.saldoActual || 0)}
           </p>
           <article className="flex flex-col gap-2">
             <div className="flex justify-between">
               <h1 className="text-12 font-semibold text-white">
-                {nombreUsuario.split(" ")[0]} {nombreUsuario.split(" ")[2]}
+                {nombreUsuario}
               </h1>
               <h2 className="text-12 font-semibold text-white">●●/●●</h2>
             </div>

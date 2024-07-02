@@ -1,6 +1,5 @@
 // 👉 Modulos Externos
 import React from "react";
-import { redirect } from "next/navigation";
 // 👉 Modulos Internos
 import EncabezadoCaja from "@/components/EncabezadoCaja";
 import SaldoTotalCaja from "@/components/SaldoTotalCaja";
@@ -9,7 +8,7 @@ import { getUsuarioRegistrado } from "@/lib/actions/user.actions";
 
 const Inicio = async () => {
   const usuario: Usuario = await getUsuarioRegistrado();
-  if (!usuario) redirect("/sign-in");
+
   return (
     <section className="home">
       <div className="home-content">

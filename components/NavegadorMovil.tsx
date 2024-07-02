@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/sheet";
 import Image from "next/image";
 import { ligasBarraLateral } from "@/constants";
+import PiePagina from "./PiePagina";
 const NavegadorMovil = ({ usuario }: BarraLateralProps) => {
   const rutaActual = usePathname();
   return (
@@ -83,7 +84,8 @@ const NavegadorMovil = ({ usuario }: BarraLateralProps) => {
                 USUARIO
               </nav>
             </SheetClose>
-            PIE DE PAGINA
+
+            <PiePagina usuario={usuario} tipo="mobile" />
           </div>
         </SheetContent>
       </Sheet>

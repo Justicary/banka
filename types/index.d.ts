@@ -216,19 +216,19 @@ declare interface SaldoTotalCajaProps {
   totalSaldoActual: number;
 }
 
-declare interface FooterProps {
-  user: Usuario;
-  type?: "mobile" | "desktop";
+declare interface PiePaginaProps {
+  usuario: Usuario;
+  tipo?: "mobile" | "desktop";
 }
 
 declare interface BarraLateralDerechaProps {
-  usuario: Partial<Usuario>;
+  usuario: Usuario;
   transacciones: Transaccion[];
   bancos: Partial<Banco>[] & Partial<Cuenta>[];
 }
 
 declare interface BarraLateralProps {
-  usuario: Partial<Usuario>;
+  usuario: Usuario;
 }
 
 declare interface RecentTransactionsProps {
