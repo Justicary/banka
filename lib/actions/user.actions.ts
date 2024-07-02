@@ -144,7 +144,7 @@ export async function getUsuarioRegistrado() {
   }
 }
 
-export const deconectarCuenta = async () => {
+export const desconectarCuenta = async () => {
   try {
     const { account } = await crearSesionCliente();
 

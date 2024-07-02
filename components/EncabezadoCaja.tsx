@@ -11,7 +11,7 @@ const EncabezadoCaja = ({
       <h1 className="header-box-title">
         {titulo}
         {tipo === "saludo" && (
-          <span className="text-bankGradient">&nbsp;{nombre}</span>
+          <span className="text-bankGradient">&nbsp;{nombre},</span>
         )}
       </h1>
       <p className="header-box-subtext">{subtitulo}</p>

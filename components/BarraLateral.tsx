@@ -7,6 +7,7 @@ import React from "react";
 // 👉 Modulos Internos
 import { cn } from "@/lib/utils";
 import { ligasBarraLateral } from "@/constants";
+import PiePagina from "./PiePagina";
 
 const BarraLateral = ({ usuario }: BarraLateralProps) => {
   const rutaActual = usePathname();
@@ -50,7 +51,8 @@ const BarraLateral = ({ usuario }: BarraLateralProps) => {
         })}
         USUARIO
       </nav>
-      PIE DE PAGINA
+
+      <PiePagina usuario={usuario} tipo="desktop" />
     </section>
   );
 };
