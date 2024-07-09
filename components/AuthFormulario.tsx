@@ -14,6 +14,7 @@ import { Form } from "@/components/ui/form";
 import { esquemaAUTH } from "@/lib/utils";
 import InputPersonalizado from "./InputPersonalizado";
 import { iniciarSesion, registrar } from "@/lib/actions/user.actions";
+import PlaidLiga from "./PlaidLiga";
 
 const AuthFormulario = ({ tipo }: { tipo: "sign-in" | "sign-up" }) => {
   const enrutador = useRouter();
@@ -30,19 +31,19 @@ const AuthFormulario = ({ tipo }: { tipo: "sign-in" | "sign-up" }) => {
   });
 
   // 2. Define un controlador de envío.
-  const alEnviar = async (values: z.infer<typeof esquema>) => {
+  const alEnviar = async (valores: z.infer<typeof esquema>) => {
     setEstaCargando(true);
     // Realizar algo con los valores.
     try {
       // Iniciar sesión en Appwrite & crear un token.
       if (tipo === "sign-up") {
-        const nuevoUsuario = await registrar(values);
+        const nuevoUsuario = await registrar(valores);
         setUsuario(nuevoUsuario);
       }
       if (tipo === "sign-in") {
         const respuesta = await iniciarSesion({
-          email: values.email,
-          password: values.password,
+          email: valores.email,
+          password: valores.password,
         });
         if (respuesta) {
           /** Navegar a Inicio */
@@ -54,8 +55,6 @@ const AuthFormulario = ({ tipo }: { tipo: "sign-in" | "sign-up" }) => {
     } finally {
       setEstaCargando(false);
     }
-    // ✅ Será type-safe y validado.
-    console.log(values);
   };
   return (
     <section className="auth-form">
@@ -87,7 +86,9 @@ const AuthFormulario = ({ tipo }: { tipo: "sign-in" | "sign-up" }) => {
         </div>
       </header>
       {usuario ? (
-        <div className="flex flex-col gap-4">{/* Plaid Link */}</div>
+        <div className="flex flex-col gap-4">
+          <PlaidLiga usuario={usuario} variante="primario" />
+        </div>
       ) : (
         <>
           <Form {...formulario}>
@@ -142,14 +143,14 @@ const AuthFormulario = ({ tipo }: { tipo: "sign-in" | "sign-up" }) => {
                     <InputPersonalizado
                       formulario={formulario}
                       nombreCampo="fdn"
-                      descripcion="dd/mm/aaaa"
+                      descripcion="YYYY-MM-DD"
                       etiqueta="Fecha de Nacimiento"
                     />
                     <InputPersonalizado
                       formulario={formulario}
                       nombreCampo="curp"
-                      descripcion="Ej. ABCD123456HPLNLC78"
-                      etiqueta="CURP"
+                      descripcion="Ej. 6824165485214567"
+                      etiqueta="N° de Seguridad Social(NSS)"
                     />
                   </div>
                 </>

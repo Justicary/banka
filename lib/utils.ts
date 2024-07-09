@@ -1,4 +1,5 @@
 /* eslint-disable no-prototype-builtins */
+// ( ͡❛ ͜ʖ ͡❛) 👉 Modulos Externos
 import { type ClassValue, clsx } from "clsx";
 import qs from "query-string";
 import { twMerge } from "tailwind-merge";
@@ -169,17 +170,17 @@ export function countTransactionCategories(
   return aggregatedCategories;
 }
 
-export function extractCustomerIdFromUrl(url: string) {
-  // Split the URL string by '/'
-  const parts = url.split("/");
+export function extraeIDClienteDeURL(url: string) {
+  // Divide la cadena de texto en partes usando '/'
+  const partes = url.split("/");
 
-  // Extract the last part, which represents the customer ID
-  const customerId = parts[parts.length - 1];
+  // Extrae la ultima parte que representa el ID del cliente.
+  const clienteID = partes[partes.length - 1];
 
-  return customerId;
+  return clienteID;
 }
 
-export function encryptId(id: string) {
+export function encriptarID(id: string) {
   return btoa(id);
 }
 
@@ -212,7 +213,10 @@ export const esquemaAUTH = (tipo: string) =>
     curp:
       tipo === "sign-in"
         ? z.string().optional()
-        : z.string().min(18, "CURP demasiado corta..."),
+        : z
+            .string()
+            .min(5, "NSS demasiado corto...")
+            .max(16, "NSS demasiado largo..."),
     direccion1:
       tipo === "sign-in"
         ? z.string().optional()
@@ -228,7 +232,16 @@ export const esquemaAUTH = (tipo: string) =>
     fdn:
       tipo === "sign-in"
         ? z.string().optional()
-        : z.string().min(3, "Fecha de nacimiento demasiado corta..."),
+        : z
+            .string()
+            .min(
+              10,
+              "Tu fecha de nacimiento debe observar el formato AAAA-MM-DD."
+            )
+            .refine((value) => /^\d{4}-\d{2}-\d{2}$/.test(value), {
+              message:
+                "El formato de la fecha de nacimiento debe ser AAAA-MM-DD",
+            }),
     nombres:
       tipo === "sign-in"
         ? z.string().optional()
