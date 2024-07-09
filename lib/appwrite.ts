@@ -11,7 +11,9 @@ export async function crearSesionCliente() {
   const session = cookies().get("sesion-appwrite");
 
   if (!session || !session.value) {
-    throw new Error("No existe el sesionID");
+    throw new Error(
+      "❌ Ya no existe información de la sesión en las cookies. Redireccinando a sign-in..."
+    );
   }
 
   client.setSession(session.value);

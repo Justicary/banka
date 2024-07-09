@@ -11,6 +11,7 @@ declare type registrarParams = {
   nombres?: string;
   apellidos?: string;
   direccion1?: string;
+  direccion2?: string;
   ciudad?: string;
   estado?: string;
   codigoPostal?: string;
@@ -124,17 +125,29 @@ declare type AddFundingSourceParams = {
   bankName: string;
 };
 
-declare type NewDwollaCustomerParams = {
-  nombres: string;
-  apellidos: string;
+declare type crearClienteDwollaParams = {
+  /**Nombres legales del individuo.*/
+  firstName: string;
+  /**Apellidos legales del individuo.*/
+  lastName: string;
+  /**Correo electrónico del individuo.*/
   email: string;
-  tipo: string;
-  direccion1: string;
-  ciudad: string;
-  estado: string;
-  codigoPostal: string;
-  fdn: string;
-  curp: string;
+  /**Tipo de identidad del cliente verificado. "Personal" para individuos y "Business" para empresas.*/
+  type: string;
+  /**Dirección fisica del individuo(calle y numero).*/
+  address1: string;
+  /**(opcional)Departamento, piso, suite, lote, etc.*/
+  address2?: string;
+  /**Ciudad de residencia del individuo.*/
+  city: string;
+  /**Estado de residencia del individuo.*/
+  state: string;
+  /**Codigo postal del individuo.*/
+  postalCode: string;
+  /**Fecha de nacimiento del individuo en formato YYYY-MM-DD. Entre 18 y 125 años.*/
+  dateOfBirth: string;
+  /**Los ultimos 4 digitos del numero de identidad del individuo.*/
+  ssn: string;
 };
 
 declare interface TarjetaBancariaProps {
@@ -180,9 +193,9 @@ declare interface PaginationProps {
   totalPages: number;
 }
 
-declare interface PlaidLinkProps {
-  user: Usuario;
-  variant?: "primary" | "ghost";
+declare interface PlaidLigaProps {
+  usuario: Usuario;
+  variante?: "primario" | "fantasma";
   dwollaCustomerId?: string;
 }
 
@@ -280,7 +293,7 @@ declare interface getTransactionsProps {
   accessToken: string;
 }
 
-declare interface CreateFundingSourceOptions {
+declare interface CrearFuenteFinanciamientoOpciones {
   customerId: string; // Dwolla Customer ID
   fundingSourceName: string; // Dwolla Funding Source Name
   plaidToken: string; // Plaid Account Processor Token
@@ -310,26 +323,26 @@ declare interface getUsuarioInfoProps {
   usuarioID: string;
 }
 
-declare interface exchangePublicTokenProps {
-  publicToken: string;
-  user: Usuario;
+declare interface intercambiarTokenPublicoProps {
+  tokenPublico: string;
+  usuario: Usuario;
 }
 
-declare interface createBankAccountProps {
-  accessToken: string;
-  userId: string;
-  accountId: string;
-  bankId: string;
-  fundingSourceUrl: string;
-  shareableId: string;
+declare interface crearCuentaBancariaProps {
+  tokenPermanente: string;
+  usuarioID: string;
+  cuentaID: string;
+  bancoID: string;
+  fuenteFinanciamientoURL: string;
+  shareableID: string;
 }
 
-declare interface getBanksProps {
-  userId: string;
+declare interface getBancosProps {
+  usuarioID: string;
 }
 
-declare interface getBankProps {
-  documentId: string;
+declare interface getBancoProps {
+  documentoID: string;
 }
 
 declare interface getBankByAccountIdProps {

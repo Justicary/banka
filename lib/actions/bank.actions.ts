@@ -9,22 +9,22 @@ import {
   TransferType,
 } from "plaid";
 
-import { plaidClient } from "../plaid";
+import { clientePlaid } from "../plaid";
 import { parseStringify } from "../utils";
 
 import { getTransactionsByBankId } from "./transaction.actions";
-import { getBanks, getBank } from "./user.actions";
+import { getBancos, getBanco } from "./user.actions";
 
 // Get multiple bank accounts
 export const getAccounts = async ({ userId }: getAccountsProps) => {
   try {
     // get banks from db
-    const banks = await getBanks({ userId });
+    const banks = await getBancos({ usuarioID: userId });
 
     const accounts = await Promise.all(
       banks?.map(async (bank: Banco) => {
         // get each account info from plaid
-        const accountsResponse = await plaidClient.accountsGet({
+        const accountsResponse = await clientePlaid.accountsGet({
           access_token: bank.accessToken,
         });
         const accountData = accountsResponse.data.accounts[0];
@@ -67,10 +67,10 @@ export const getAccounts = async ({ userId }: getAccountsProps) => {
 export const getAccount = async ({ appwriteItemId }: getAccountProps) => {
   try {
     // get bank from db
-    const bank = await getBank({ documentId: appwriteItemId });
+    const bank = await getBanco({ documentoID: appwriteItemId });
 
     // get account info from plaid
-    const accountsResponse = await plaidClient.accountsGet({
+    const accountsResponse = await clientePlaid.accountsGet({
       access_token: bank.accessToken,
     });
     const accountData = accountsResponse.data.accounts[0];
@@ -133,7 +133,7 @@ export const getInstitution = async ({
   institutionId,
 }: getInstitutionProps) => {
   try {
-    const institutionResponse = await plaidClient.institutionsGetById({
+    const institutionResponse = await clientePlaid.institutionsGetById({
       institution_id: institutionId,
       country_codes: ["US"] as CountryCode[],
     });
@@ -156,7 +156,7 @@ export const getTransactions = async ({
   try {
     // Iterate through each page of new transaction updates for item
     while (hasMore) {
-      const response = await plaidClient.transactionsSync({
+      const response = await clientePlaid.transactionsSync({
         access_token: accessToken,
       });
 

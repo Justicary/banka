@@ -1,21 +1,21 @@
 "use server";
-
-import { ID, Query } from "node-appwrite";
-import { crearAdminCliente, crearSesionCliente } from "../appwrite";
-import { cookies } from "next/headers";
-import { encryptId, extractCustomerIdFromUrl, parseStringify } from "../utils";
+// ( ͡❛ ͜ʖ ͡❛) 👉 Modulos Externos
 import {
   CountryCode,
   ProcessorTokenCreateRequest,
   ProcessorTokenCreateRequestProcessorEnum,
   Products,
 } from "plaid";
-
-import { plaidClient } from "@/lib/plaid";
+import { cookies } from "next/headers";
+import { ID, Query } from "node-appwrite";
 import { revalidatePath } from "next/cache";
-// import { addFundingSource, createDwollaCustomer } from "./dwolla.actions";
+// ( ͡❛ ͜ʖ ͡❛) 👉 Modulos Internos
+import { crearAdminCliente, crearSesionCliente } from "../appwrite";
+import { encriptarID, extraeIDClienteDeURL, parseStringify } from "../utils";
+import { clientePlaid } from "@/lib/plaid";
+import { addFuenteFinanciamiento, crearClienteDwolla } from "./dwolla.actions";
 
-// Destructuracion, renombre y acceso a las varables de entorno.
+// Variables de entorno: Destructura & renombra.
 const {
   APPWRITE_DATABASE_ID: DATABASE_ID,
   APPWRITE_USUARIOS_COLLECTION_ID: USUARIOS_COLLECTION_ID,
@@ -65,9 +65,10 @@ export const iniciarSesion = async ({
   }
 };
 
-export const registrar = async ({ password, ...values }: registrarParams) => {
-  const { email, nombres, apellidos } = values;
+export const registrar = async ({ password, ...valores }: registrarParams) => {
+  const { email, nombres, apellidos } = valores;
 
+  // Se llama "transacción atomica" a una transacción que es una de dos, funciona o es rechazada. No tiene otra forma de hacerlo.
   let nuevaCuentaUsuario;
 
   try {
@@ -82,42 +83,53 @@ export const registrar = async ({ password, ...values }: registrarParams) => {
       `${nombres} ${apellidos}`
     );
 
-    if (!nuevaCuentaUsuario) throw new Error("Error al crear el usuario.");
+    if (!nuevaCuentaUsuario)
+      throw new Error("al crear cuenta en Appwrite auth...");
+
+    const dwollaCliente = {
+      address1: valores.direccion1!,
+      address2: valores.direccion2,
+      city: valores.ciudad!,
+      dateOfBirth: valores.fdn!,
+      email: valores.email!,
+      firstName: valores.nombres!,
+      lastName: valores.apellidos!,
+      state: "CA", // valores.estado!.toUpperCase().substring(0, 2),
+      postalCode: valores.codigoPostal!,
+      ssn: valores.curp!.slice(-4),
+      type: "personal",
+    };
 
     // Crea un cliente en Dwolla
-    // const dwollaCustomerUrl = await createDwollaCustomer({
-    //   direccion1: values.direccion1,
-    //   ciudad: values.ciudad,
-    //   fdn: values.fdn,
-    //   email: values.email,
-    //   nombres: values.nombres,
-    //   apellidos: values.apellidos,
-    //   estado: values.estado,
-    //   codigoPostal: values.codigoPostal,
-    //   curp: values.curp,
-    //   tipo: "personal",
-    // });
+    const dwollaClienteURL = await crearClienteDwolla(dwollaCliente);
 
-    // if (!dwollaCustomerUrl)
-    //   throw new Error("Error al crear el cliente en Dwolla.");
+    if (!dwollaClienteURL) {
+      console.log("ℹ Objeto enviado a DWOLLA : ", dwollaCliente);
+      throw new Error("al crear cliente en DWOLLA:");
+    }
 
-    // const dwollaCustomerId = extractCustomerIdFromUrl(dwollaCustomerUrl);
+    // Extrae el ID del cliente desde el URL.
+    const dwollaClienteID = extraeIDClienteDeURL(dwollaClienteURL);
 
     const nuevoUsuario = await database.createDocument(
       DATABASE_ID!,
       USUARIOS_COLLECTION_ID!,
       ID.unique(),
       {
-        ...values,
+        ...valores,
         usuarioID: nuevaCuentaUsuario.$id,
-        dwollaCustomerID: "dwollaID",
-        dwollaCustomerUrl: "dwollaUrl",
+        dwollaClienteID,
+        dwollaClienteURL,
       }
     );
 
-    const session = await account.createEmailPasswordSession(email, password);
+    if (!nuevoUsuario)
+      throw new Error("al crear usuario en Appwrite database...");
 
-    cookies().set("sesion-appwrite", session.secret, {
+    // Crea una sesión de usuario en APPWRITE.
+    const sesion = await account.createEmailPasswordSession(email, password);
+
+    cookies().set("sesion-appwrite", sesion.secret, {
       path: "/",
       httpOnly: true,
       sameSite: "strict",
@@ -126,7 +138,8 @@ export const registrar = async ({ password, ...values }: registrarParams) => {
 
     return parseStringify(nuevoUsuario);
   } catch (error) {
-    console.error("Error", error);
+    console.error("❌ Error en transacción atómica(registrar) ", error);
+    // console.log("ℹ Valores recibidos(user.actions):", valores);
   }
 };
 
@@ -156,7 +169,7 @@ export const desconectarCuenta = async () => {
   }
 };
 
-export const createLinkToken = async (usuario: Usuario) => {
+export const crearLigaToken = async (usuario: Usuario) => {
   try {
     const tokenParams = {
       user: {
@@ -164,11 +177,11 @@ export const createLinkToken = async (usuario: Usuario) => {
       },
       client_name: `${usuario.nombres} ${usuario.apellidos}`,
       products: ["auth"] as Products[],
-      language: "en",
-      country_codes: ["US"] as CountryCode[],
+      language: "es",
+      country_codes: ["US"] as CountryCode[], // ["MX"] NO SOPORTADO POR PLAID
     };
 
-    const response = await plaidClient.linkTokenCreate(tokenParams);
+    const response = await clientePlaid.linkTokenCreate(tokenParams);
 
     return parseStringify({ linkToken: response.data.link_token });
   } catch (error) {
@@ -176,15 +189,16 @@ export const createLinkToken = async (usuario: Usuario) => {
   }
 };
 
-export const createBankAccount = async ({
-  userId,
-  bankId,
-  accountId,
-  accessToken,
-  fundingSourceUrl,
-  shareableId,
-}: createBankAccountProps) => {
+export const crearCuentaBancaria = async ({
+  usuarioID,
+  bancoID,
+  cuentaID,
+  tokenPermanente,
+  fuenteFinanciamientoURL,
+  shareableID,
+}: crearCuentaBancariaProps) => {
   try {
+    //OJO: Crea un registro en la base de datos bancos en Appwrite.
     const { database } = await crearAdminCliente();
 
     const bankAccount = await database.createDocument(
@@ -192,109 +206,114 @@ export const createBankAccount = async ({
       BANCOS_COLLECTION_ID!,
       ID.unique(),
       {
-        userId,
-        bankId,
-        accountId,
-        accessToken,
-        fundingSourceUrl,
-        shareableId,
+        bancoID,
+        cuentaID,
+        fuenteFinanciamientoURL,
+        shareableID,
+        tokenPermanente,
+        usuarioID,
       }
     );
 
     return parseStringify(bankAccount);
   } catch (error) {
-    console.log(error);
+    console.error("❌ Error al crear la cuenta bancaria en Appwrite: ", error);
   }
 };
 
-export const exchangePublicToken = async ({
-  publicToken,
-  user,
-}: exchangePublicTokenProps) => {
+export const intercambiarTokenPublico = async ({
+  tokenPublico,
+  usuario,
+}: intercambiarTokenPublicoProps) => {
   try {
-    // Exchange public token for access token and item ID
-    const response = await plaidClient.itemPublicTokenExchange({
-      public_token: publicToken,
+    // Intercambia el token público por un token de acceso permanente y un item_id.
+    const respuesta = await clientePlaid.itemPublicTokenExchange({
+      public_token: tokenPublico,
     });
 
-    const accessToken = response.data.access_token;
-    const itemId = response.data.item_id;
+    const tokenPermanente = respuesta.data.access_token;
+    const itemId = respuesta.data.item_id;
 
-    // Get account information from Plaid using the access token
-    const accountsResponse = await plaidClient.accountsGet({
-      access_token: accessToken,
+    // Obtiene la información de las cuentas desde Plaid usando el token permanente.
+    const getCuentas = await clientePlaid.accountsGet({
+      access_token: tokenPermanente,
     });
 
-    const accountData = accountsResponse.data.accounts[0];
+    // Almacena la información de la cuenta base del arreglo de cuentas.
+    const cuentaDatos = getCuentas.data.accounts[0];
 
-    // Create a processor token for Dwolla using the access token and account ID
-    const request: ProcessorTokenCreateRequest = {
-      access_token: accessToken,
-      account_id: accountData.account_id,
+    // Dwolla es un procesador de pagos que usaremos para mover dinero de una cuenta a otra utilizando plaid.
+    // Crea un token de procesador para Dwolla usando el token permanente y el ID de cuentaDatos.
+    const solicitud: ProcessorTokenCreateRequest = {
+      access_token: tokenPermanente,
+      account_id: cuentaDatos.account_id,
       processor: "dwolla" as ProcessorTokenCreateRequestProcessorEnum,
     };
 
-    const processorTokenResponse = await plaidClient.processorTokenCreate(
-      request
+    const respuestaCrearToken = await clientePlaid.processorTokenCreate(
+      solicitud
     );
-    const processorToken = processorTokenResponse.data.processor_token;
+    const processorToken = respuestaCrearToken.data.processor_token;
 
     // Create a funding source URL for the account using the Dwolla customer ID, processor token, and bank name
-    // const fundingSourceUrl = await addFundingSource({
-    //   dwollaCustomerId: user.dwollaCustomerId,
-    //   processorToken,
-    //   bankName: accountData.name,
-    // });
-
-    // If the funding source URL is not created, throw an error
-    // if (!fundingSourceUrl) throw Error;
-
-    // Create a bank account using the user ID, item ID, account ID, access token, funding source URL, and shareableId ID
-    await createBankAccount({
-      userId: user.$id,
-      bankId: itemId,
-      accountId: accountData.account_id,
-      accessToken,
-      fundingSourceUrl: "", // TODO: Corregir a solo fundingSourceUrl
-      shareableId: encryptId(accountData.account_id),
+    const fuenteFinanciamientoURL = await addFuenteFinanciamiento({
+      dwollaCustomerId: usuario.dwollaCustomerId,
+      processorToken,
+      bankName: cuentaDatos.name,
     });
 
-    // Revalidate the path to reflect the changes
+    // Si el URL de la fuente de saldo no se crea, emite un error.
+    if (!fuenteFinanciamientoURL) throw Error;
+
+    // Crea una nueva cuenta bancaria en la base de datos utilizand usuarioID, itemId, account ID, tokenPermanente, funding source URL y shareableId.
+    await crearCuentaBancaria({
+      usuarioID: usuario.$id,
+      bancoID: itemId,
+      cuentaID: cuentaDatos.account_id,
+      tokenPermanente,
+      fuenteFinanciamientoURL,
+      shareableID: encriptarID(cuentaDatos.account_id),
+    });
+
+    // Revalida la ruta para reflejar los cambios.
     revalidatePath("/");
 
-    // Return a success message
+    // Regresa una respuesta de éxito.
     return parseStringify({
       publicTokenExchange: "complete",
     });
   } catch (error) {
-    console.error("An error occurred while creating exchanging token:", error);
+    console.error(
+      "Ocurrió un error mientras se creaba el token de intercambio:",
+      error
+    );
   }
 };
 
-export const getBanks = async ({ userId }: getBanksProps) => {
+export const getBancos = async ({ usuarioID: userId }: getBancosProps) => {
   try {
     const { database } = await crearAdminCliente();
 
-    const banks = await database.listDocuments(
+    const bancos = await database.listDocuments(
       DATABASE_ID!,
       BANCOS_COLLECTION_ID!,
-      [Query.equal("userId", [userId])]
+      [Query.equal("usuarioID", [userId])]
     );
 
-    return parseStringify(banks.documents);
+    return parseStringify(bancos.documents);
   } catch (error) {
     console.log(error);
   }
 };
 
-export const getBank = async ({ documentId }: getBankProps) => {
+export const getBanco = async ({ documentoID }: getBancoProps) => {
   try {
     const { database } = await crearAdminCliente();
 
     const bank = await database.listDocuments(
       DATABASE_ID!,
       BANCOS_COLLECTION_ID!,
-      [Query.equal("$id", [documentId])]
+      [Query.equal("$id", [documentoID])]
     );
 
     return parseStringify(bank.documents[0]);

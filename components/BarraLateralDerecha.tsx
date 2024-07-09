@@ -16,15 +16,15 @@ const BarraLateralDerecha = ({
         <div className="profile">
           <div className="profile-img">
             <span className="text-5xl font-bold text-blue-500">
-              {usuario.nombres?.[0]}
+              {usuario?.nombres?.[0]}
             </span>
           </div>
           <div className="profile-details">
             <h1 className="profile-name">
-              {usuario.nombres} {usuario.apellidos}
+              {usuario?.nombres} {usuario?.apellidos}
             </h1>
             <p className="profile-email">
-              {usuario.email || "email@inexistente"}
+              {usuario?.email || "email@inexistente"}
             </p>
           </div>
         </div>
@@ -52,8 +52,8 @@ const BarraLateralDerecha = ({
               <TarjetaBancaria
                 key={bancos[0].$id}
                 cuenta={bancos[0]}
-                nombreUsuario={`${usuario.nombres.split(" ")[0]} ${
-                  usuario.apellidos.split(" ")[0]
+                nombreUsuario={`${usuario?.nombres.split(" ")[0]} ${
+                  usuario?.apellidos.split(" ")[0]
                 }`}
                 mostrarSaldo={false}
               />
@@ -63,8 +63,8 @@ const BarraLateralDerecha = ({
                 <TarjetaBancaria
                   key={bancos[1].$id}
                   cuenta={bancos[1]}
-                  nombreUsuario={`${usuario.nombres.split(" ")[0]} ${
-                    usuario.apellidos.split(" ")[0]
+                  nombreUsuario={`${usuario?.nombres.split(" ")[0]} ${
+                    usuario?.apellidos.split(" ")[0]
                   }`}
                   mostrarSaldo={false}
                 />

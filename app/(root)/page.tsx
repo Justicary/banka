@@ -1,6 +1,6 @@
-// 👉 Modulos Externos
+// ( ͡❛ ͜ʖ ͡❛) 👉 Modulos Externos
 import React from "react";
-// 👉 Modulos Internos
+// ( ͡❛ ͜ʖ ͡❛) 👉 Modulos Internos
 import EncabezadoCaja from "@/components/EncabezadoCaja";
 import SaldoTotalCaja from "@/components/SaldoTotalCaja";
 import BarraLateralDerecha from "@/components/BarraLateralDerecha";
@@ -14,7 +14,7 @@ const Inicio = async () => {
       <div className="home-content">
         <header className="home-header">
           <EncabezadoCaja
-            nombre={usuario.nombres || "Invitado"}
+            nombre={usuario?.nombres || "Invitado"}
             subtitulo="Accesa y controla tu cuenta y transacciones de forma eficiente."
             tipo="saludo"
             titulo="Bienvenido"
