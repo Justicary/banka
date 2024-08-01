@@ -1,36 +1,90 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# ¡BANKA WEB APP! ✨
 
-## Getting Started
+¡Hola! 👋 En este ReadMe se explica de forma concisa y detallada el "stack" de
+tecnologías utilizadas en el desarrollo de ésta aplicación, así como las
+instrucciones que se deben de seguir para ejecutarla en un servidor local.
 
-First, run the development server:
+# Stack de Tecnologías 🧠
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+|          | Versión   | ¿Más información?                                      |
+| -------- | --------- | ------------------------------------------------------ |
+| REACT    | `18.0.0`  | [Página principal](https://stripe.com/docs/api)        |
+| NEXTJS   | `14.2.4`  | [Página principal](https://nextjs.org/)                |
+| TAILWIND | `^3.4.1`  | [Página principal](https://tailwindcss.com/)           |
+| DWOLLA   | `^3.4.0`  | [Página principal](https://developers.dwolla.com/docs) |
+| PLAID    | `^25.0.0` | [Página principal](https://plaid.com/)                 |
+| APPWRITE | `@latest` | Backend [Página principal](https://appwrite.io/)       |
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Dependencias ⚙️
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+En adición al "stack" de arriba listado, utiliza diferentes
+"paquetes" de archivos para su correcto funcionamiento. El listado de todos y
+cada uno de ellos lo puedes encontrar en el archivo **package.json** en éste
+directorio.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+# Requerimientos ⚡
 
-## Learn More
+Es imperativo que se instale el siguiente software y en el orden que se muestra
+a continuación:
 
-To learn more about Next.js, take a look at the following resources:
+| Nombre            | Versión    | ¿Más información?                                                                    |
+| ----------------- | ---------- | ------------------------------------------------------------------------------------ | --- |
+| NodeJS            | `^18.18.0` | [Página principal](https://nodejs.org/es/)                                           |
+| NPM               | `^10.7.0`  | Se instala automáticamente con NodeJS                                                |
+| PNPM              | `^9.4.0`   | Ejecutar en PowerShell: iwr https://get.pnpm.io/install.ps1 -useb                    | iex |
+| GIT               | `^2.35.0`  | [Windows](https://git-scm.com/download/win) -[MAC](https://git-scm.com/download/mac) |
+| VisualStudio Code | `@latest`  | [Página de descarga](https://code.visualstudio.com/)                                 |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# ¿Cómo ejecutar la Aplicación? 🤯
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+A continuación se describe de forma ordenada los tres sencillos pasos que
+se deben seguir para conseguirlo.
 
-## Deploy on Vercel
+## 1.- Clonar el repositorio GIT
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Lo primero que se debe hacer, es crear una copia del el proyecto (código fuente)
+en el directorio de preferencia del ordenador. Como ejemplo en Windows se debe
+abrir la "consola" (interprete de comandos) en **modo administrador** y
+escribir:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+> md banka ⏎
+> cd banka ⏎
+> git clone https://github.com/Justicary/banka .git . ⏎
+
+## Accesar al proyecto usando VisualStudio Code
+
+Para accesar al proyecto desde VisualStudio Code, solo falta que hagas "click"
+derecho sobre la carpeta en donde se instaló y de elija la opción **"Abrir con
+Code"**. Ó si así lo prefieres, puedes ejecutarlo desde la "consola" (interprete
+de comandos) en **modo administrador**. Asegúrate de que estás en el directorio
+en donde se encuentra el proyecto y escribe:
+
+> code . ⏎
+
+## 2.- Instalar dependencias(paquetes)
+
+En segundo lugar y asumiendo que se acceso al proyecto desde VisualStudio Code.
+Se deben instalar todas y cada una de las dependencias necesarias para la
+correcta ejecución de la aplicación. Para esto se debe abrir la consola desde VS
+Code utilizando la combinación de teclas CTRL+Ñ, asegurarse de que la consola
+sea del tipo "command prompt". Después escribir:
+
+> npm ó pnpm install ⏎
+
+## 3.- Montar/Iniciar servidor de desarrollo local
+
+En tercer lugar deberás crear la carpeta build con el siguiente comando
+
+> pnpm run build ⏎
+
+para compilar el servidor localmente deberás correr el siguiente comando
+
+> pnpm run dev ⏎
+
+En unos segundos y después de haber ejecutado alguno de los comandos anteriores, te aparecerá un mensaje en consola indicando la dirección LOCALHOST-PUERTO en donde se monto exitosamente la aplicación.
+
+Recordatorio: Se necesitan agregar las variables de entorno necesarias para Dwolla y Plaid.
+
+# Desarrollado Por ❤️
+
+**Víctor E. Mancera Gallardo**
