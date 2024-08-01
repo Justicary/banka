@@ -28,10 +28,10 @@ Es imperativo que se instale el siguiente software y en el orden que se muestra
 a continuación:
 
 | Nombre            | Versión    | ¿Más información?                                                                    |
-| ----------------- | ---------- | ------------------------------------------------------------------------------------ | --- |
+| ----------------- | ---------- | ------------------------------------------------------------------------------------ |
 | NodeJS            | `^18.18.0` | [Página principal](https://nodejs.org/es/)                                           |
 | NPM               | `^10.7.0`  | Se instala automáticamente con NodeJS                                                |
-| PNPM              | `^9.4.0`   | Ejecutar en PowerShell: iwr https://get.pnpm.io/install.ps1 -useb                    | iex |
+| PNPM              | `^9.4.0`   | Sigue las instrucciones de la [Página principal] https://pnpm.io/es/installation     |
 | GIT               | `^2.35.0`  | [Windows](https://git-scm.com/download/win) -[MAC](https://git-scm.com/download/mac) |
 | VisualStudio Code | `@latest`  | [Página de descarga](https://code.visualstudio.com/)                                 |
 
